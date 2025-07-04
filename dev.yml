@@ -4,10 +4,3 @@ type: rust
 
 up:
   - rust
-
-commands:
-  style:
-    desc: Run all style
-    run: |
-      cargo fmt --all
-      cargo clippy --fix --allow-dirty --allow-staged
