@@ -3,9 +3,9 @@
 ## SSH Implementation Roadmap
 
 ### 1. SSH Protocol Version Exchange (RFC 4253 §4.2)
-- [ ] Server sends: `SSH-2.0-rssh_0.1.0\r\n`
-- [ ] Client sends: `SSH-2.0-rssh_0.1.0\r\n`
-- [ ] Parse and validate version strings
+- [x] Server sends: `SSH-2.0-rssh_0.1.0\r\n`
+- [x] Client sends: `SSH-2.0-rssh_0.1.0\r\n`
+- [x] Parse and validate version strings
 
 ### 2. Key Exchange (KEX)
 - [ ] Implement Diffie-Hellman group14-sha256

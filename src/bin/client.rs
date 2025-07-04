@@ -1,11 +1,11 @@
 use clap::Parser;
+use rssh::protocol;
 use std::net::SocketAddr;
-use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
 
 #[derive(Parser, Debug)]
 #[command(name = "rssh-client")]
-#[command(author, version, about = "Rust SSH Client", long_about = None)]
+#[command(author, version, about = "Rust SSH Client")]
 struct Args {
     /// SSH server address to connect to
     #[arg(value_name = "HOST[:PORT]", default_value = "127.0.0.1:2222")]
@@ -22,12 +22,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut stream = TcpStream::connect(addr).await?;
     println!("Connected to SSH server at {addr}");
 
-    // TODO: Implement SSH protocol client
-    stream.write_all(b"Hello from client\n").await?;
+    let server_version = protocol::read_version(&mut stream).await?;
+    println!("Server version: {server_version}");
 
-    let mut buf = vec![0; 1024];
-    let n = stream.read(&mut buf).await?;
-    println!("Received: {}", String::from_utf8_lossy(&buf[..n]));
+    let (proto, software) = protocol::parse_version(&server_version)?;
+    println!("Server protocol: {proto}, software: {software}");
+
+    protocol::send_version(&mut stream).await?;
+    println!("Sent client version");
 
     Ok(())
 }
